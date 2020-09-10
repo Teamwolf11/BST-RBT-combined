@@ -12,4 +12,4 @@ tree.h - header for tree.c
 
 tree.c - code for BST and RBT
 
-any other files are expendable/not needed
+any other files are expendable and are more for when we were figuring out what we were coding.
