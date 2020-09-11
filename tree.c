@@ -3,16 +3,18 @@
 #include <string.h>
 
 #include "tree.h"
+#include "mylib.h"
 
 #define IS_BLACK(x) ((NULL == (x)) || (BLACK == (x)->colour))
 #define IS_RED(x) ((NULL != (x)) && (RED == (x)->colour))
 
-static tree_t typeOfTree;
+static tree_t tree_type;
 
 struct tree_node { /* should live in tree.c */
     char *key;
+    int frequency;
     rbt_colour colour;
-    tree_t treeType;
+    tree_t typeOfTree;
     tree left;
     tree right;
 };
@@ -20,11 +22,11 @@ struct tree_node { /* should live in tree.c */
 /*returns null node to represent empty new tree*/
 tree tree_new(tree_t t) {
     if (t == BST) {
-        typeOfTree = BST;
+        tree_type = BST;
     } else {
-        typeOfTree = RBT; 
+        tree_type = RBT; 
     }
-    /* typeOfTree = t; */
+    /* tree_type = t; */
     return NULL;
 }
 
@@ -35,34 +37,34 @@ int tree_search(tree r, char *key) {
     /* strcmp returns 0 if strings are equal, 1 if the current key is bigger than the key being searched, and negative if
      * the current key is less than the key being searched
     */
-    /* If the keys are equal, return 1 */
-    if (strcmp(r->key, key) == 0) {
-        return 1;
+
     /* If the searched key is greater, search left tree instead */
-    } if(strcmp(r->key, key) > 0) {
+    if (strcmp(r->key, key) > 0) {
         return tree_search(r->left, key);
     /* If the searched key is less than, search right tree instead */
     } else if(strcmp(r->key, key) < 0) {
         return tree_search(r->right, key);
     }
-
+    /* If the keys are equal, return 1 */
+    return 1;
 }
 
 tree tree_insert(tree r, char *key) {
     r = recursive_insert(r, &key);
-     r->key->colour = BLACK;
-     return r;
+    r->colour = BLACK;
+    return r;
 }
 
 tree recursive_insert (tree r, char *key){
     /*If an empty tree, we can allocate memory, copy in the key into the node, and return the result. */
     if(r == NULL) {
-        r = malloc(sizeof *r);
-        r->key = malloc((strlen(key) + 1) * sizeof key[0]);
+        r = emalloc(sizeof *r);
+        r->key = emalloc((strlen(key) + 1) * sizeof key[0]);
         r->left = NULL;
         r->right = NULL;
         r->key = strcpy(r->key, key);
         r->colour = RED;
+        r->frequency = 1;
         return r;
     }
 
@@ -72,6 +74,8 @@ tree recursive_insert (tree r, char *key){
         /* else if the current top node value is less than key being inserted, then we insert into the right subtree */
     } else if(strcmp(r -> key, key) < 0) {
         r->right = tree_insert(r->right, key);
+    } else {
+        r->frequency++;
     }
 
     r = tree_fix(r);
@@ -147,6 +151,11 @@ void tree_inorder(tree r, void f(char *s)) {
     if(r == NULL) {
         return;
     }
+    if (IS_RED(r)) {
+        printf("red: ");
+    } else {
+        printf("black: ");
+    }
     /* call self on left subtree, traversing recursively */
     tree_inorder(r->left, f);
     /* call print method on current node */
@@ -160,6 +169,11 @@ void tree_preorder(tree r, void f(char *s)) {
     if(r == NULL) {
         return;
     }
+    if (IS_RED(r)) {
+        printf("red: ");
+    } else {
+        printf("black: ");
+    }
     /* call print method on current node */
     f(r->key);
     /* call self on left and right, traversing subtree recursively */
@@ -167,58 +181,7 @@ void tree_preorder(tree r, void f(char *s)) {
     tree_preorder(r->right, f);
 }
 
-tree tree_delete(tree r, char *key) {
-    char *tmp;
-    tree tmp_tree;
-
-    /* if tree is null then return, stopping */
-    if(r == NULL) {
-        return NULL;
-    }
- 
-    /* 
-     * if node to delete matches node found then take out node, 
-     *
-     * else if nodes value is more than value of node to delete then call delete
-     * recursively on left subtree
-     * 
-     * else if nodes value is less than value of node to delete then call delete 
-     * recursively on right subtree
-     */
-    if(strcmp(r -> key, key) == 0) {
-        if(r -> left == NULL) {
-            free(r -> key);
-            tmp_tree = r -> right;
-            free(r);
-            r = tmp_tree;
-        } else if(r -> right == NULL) {
-            free(r -> key);
-            tmp_tree = r -> left;
-            free(r);
-            r = tmp_tree;
-        } else {
-            tmp_tree  = r -> right;
-            while(tmp_tree -> left != NULL) {
-                tmp_tree = tmp_tree -> left;
-            }
-            /* swap node values of node and leftmost node from right subtree,
-             * then delete node */
-            tmp = r -> key;
-            r -> key = tmp_tree -> key;
-            tmp_tree -> key = tmp;
-            r -> right = tree_delete(r -> right, tmp_tree -> key);
-        }
-    } else if(strcmp(r -> key, key) > 0) {
-        r -> left = tree_delete(r -> left, key);
-    } else if(strcmp(r -> key, key) < 0) {
-        r -> right = tree_delete(r -> right, key);
-    }
-
-    /* return modified tree */
-    return r;
-}
-
-extern tree right_rotate(tree r){
+tree right_rotate(tree r){
     tree temp;
 
     temp = r;
@@ -228,7 +191,7 @@ extern tree right_rotate(tree r){
 
     return r;
 }
-extern tree left_rotate(tree r){
+tree left_rotate(tree r){
     tree temp;
 
     temp = r;
@@ -237,6 +200,10 @@ extern tree left_rotate(tree r){
     r->left = temp;
 
     return r;
+}
+
+int tree_depth(tree r){
+    
 }
 
 tree tree_free(tree r) {
@@ -253,5 +220,46 @@ tree tree_free(tree r) {
     free(r -> key);
     free(r);
     return NULL;
+}
+
+/**
+ * Traverses the tree writing a DOT description about connections, and
+ * possibly colours, to the given output stream.
+ *
+ * @param t the tree to output a DOT description of.
+ * @param out the stream to write the DOT output to.
+ */
+static void tree_output_dot_aux(tree t, FILE *out) {
+    if(t->key != NULL) {
+        fprintf(out, "\"%s\"[label=\"{<f0>%s:%d|{<f1>|<f2>}}\"color=%s];\n",
+                t->key, t->key, t->frequency,
+                (RBT == tree_type && RED == t->colour) ? "red":"black");
+    }
+    if(t->left != NULL) {
+        tree_output_dot_aux(t->left, out);
+        fprintf(out, "\"%s\":f1 -> \"%s\":f0;\n", t->key, t->left->key);
+    }
+    if(t->right != NULL) {
+        tree_output_dot_aux(t->right, out);
+        fprintf(out, "\"%s\":f2 -> \"%s\":f0;\n", t->key, t->right->key);
+    }
+}
+
+/**
+ * Output a DOT description of this tree to the given output stream.
+ * DOT is a plain text graph description language (see www.graphviz.org).
+ * You can create a viewable graph with the command
+ *
+ *    dot -Tpdf < graphfile.dot > graphfile.pdf
+ *
+ * You can also use png, ps, jpg, svg... instead of pdf
+ *
+ * @param t the tree to output the DOT description of.
+ * @param out the stream to write the DOT description to.
+ */
+void tree_output_dot(tree t, FILE *out) {
+    fprintf(out, "digraph tree {\nnode [shape = Mrecord, penwidth = 2];\n");
+    tree_output_dot_aux(t, out);
+    fprintf(out, "}\n");
 }
 
