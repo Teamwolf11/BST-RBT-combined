@@ -12,7 +12,7 @@ static tree_t tree_type;
 
 struct tree_node { /* should live in tree.c */
     char *key;
-    int frequencies;
+    int frequency;
     rbt_colour colour;
     tree_t typeOfTree;
     tree left;
@@ -22,11 +22,11 @@ struct tree_node { /* should live in tree.c */
 /*returns null node to represent empty new tree*/
 tree tree_new(tree_t t) {
     if (t == BST) {
-        typeOfTree = BST;
+        tree_type = BST;
     } else {
-        typeOfTree = RBT; 
+        tree_type = RBT; 
     }
-    /* typeOfTree = t; */
+    /* tree_type = t; */
     return NULL;
 }
 
@@ -51,8 +51,8 @@ int tree_search(tree r, char *key) {
 
 tree tree_insert(tree r, char *key) {
     r = recursive_insert(r, &key);
-     r->key->colour = BLACK;
-     return r;
+    r->colour = BLACK;
+    return r;
 }
 
 tree recursive_insert (tree r, char *key){
@@ -64,7 +64,7 @@ tree recursive_insert (tree r, char *key){
         r->right = NULL;
         r->key = strcpy(r->key, key);
         r->colour = RED;
-        r->frequencies = 1;
+        r->frequency = 1;
         return r;
     }
 
@@ -75,7 +75,7 @@ tree recursive_insert (tree r, char *key){
     } else if(strcmp(r -> key, key) < 0) {
         r->right = tree_insert(r->right, key);
     } else {
-        r->frequencies++;
+        r->frequency++;
     }
 
     r = tree_fix(r);
@@ -223,24 +223,6 @@ tree tree_free(tree r) {
 }
 
 /**
- * Output a DOT description of this tree to the given output stream.
- * DOT is a plain text graph description language (see www.graphviz.org).
- * You can create a viewable graph with the command
- *
- *    dot -Tpdf < graphfile.dot > graphfile.pdf
- *
- * You can also use png, ps, jpg, svg... instead of pdf
- *
- * @param t the tree to output the DOT description of.
- * @param out the stream to write the DOT description to.
- */
-void tree_output_dot(tree t, FILE *out) {
-    fprintf(out, "digraph tree {\nnode [shape = Mrecord, penwidth = 2];\n");
-    tree_output_dot_aux(t, out);
-    fprintf(out, "}\n");
-}
-
-/**
  * Traverses the tree writing a DOT description about connections, and
  * possibly colours, to the given output stream.
  *
@@ -262,3 +244,22 @@ static void tree_output_dot_aux(tree t, FILE *out) {
         fprintf(out, "\"%s\":f2 -> \"%s\":f0;\n", t->key, t->right->key);
     }
 }
+
+/**
+ * Output a DOT description of this tree to the given output stream.
+ * DOT is a plain text graph description language (see www.graphviz.org).
+ * You can create a viewable graph with the command
+ *
+ *    dot -Tpdf < graphfile.dot > graphfile.pdf
+ *
+ * You can also use png, ps, jpg, svg... instead of pdf
+ *
+ * @param t the tree to output the DOT description of.
+ * @param out the stream to write the DOT description to.
+ */
+void tree_output_dot(tree t, FILE *out) {
+    fprintf(out, "digraph tree {\nnode [shape = Mrecord, penwidth = 2];\n");
+    tree_output_dot_aux(t, out);
+    fprintf(out, "}\n");
+}
+
