@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -12,8 +13,25 @@ void print_key(char *s){
     printf("%5s\n",s);
 }
 
-int main(void) {
+int main(int argc, char **argv) {
 
+    const char *optstring = "c:df:orh";
+    char option;
+    
+    while ((option = getopt(argc, argv, optstring)) != EOF) {
+        switch (option) {
+            case 'c':
+                
+                /* do something */
+            case 'd':
+                /* the argument after the -b is available
+                   in the global variable 'optarg' */
+            case 'f':
+                /* do something else */
+            default:
+                /* if an unknown option is given */
+        }
+    }
     tree b= tree_new(RBT);
     b=tree_insert(b,"h");
     b=tree_insert(b,"l");
