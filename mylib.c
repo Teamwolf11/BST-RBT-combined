@@ -10,7 +10,7 @@ void *emalloc(size_t s) {
     void* result =malloc(s);
     if(result==NULL){
         fprintf(stderr, "memory allocation failed.\n");
-            exit(EXIT_FAILURE);
+        exit(EXIT_FAILURE);
     }
     return result;
 }
