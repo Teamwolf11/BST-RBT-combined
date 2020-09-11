@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "tree.h"
+#include "mylib.h"
 
 #define IS_BLACK(x) ((NULL == (x)) || (BLACK == (x)->colour))
 #define IS_RED(x) ((NULL != (x)) && (RED == (x)->colour))
@@ -57,8 +58,8 @@ tree tree_insert(tree r, char *key) {
 tree recursive_insert (tree r, char *key){
     /*If an empty tree, we can allocate memory, copy in the key into the node, and return the result. */
     if(r == NULL) {
-        r = malloc(sizeof *r);
-        r->key = malloc((strlen(key) + 1) * sizeof key[0]);
+        r = emalloc(sizeof *r);
+        r->key = emalloc((strlen(key) + 1) * sizeof key[0]);
         r->left = NULL;
         r->right = NULL;
         r->key = strcpy(r->key, key);
