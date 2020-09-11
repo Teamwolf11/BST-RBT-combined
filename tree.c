@@ -36,23 +36,17 @@ int tree_search(tree r, char *key) {
     }
     /* strcmp returns 0 if strings are equal, 1 if the current key is bigger than the key being searched, and negative if
      * the current key is less than the key being searched
-    */
+     */
 
     /* If the searched key is greater, search left tree instead */
     if (strcmp(r->key, key) > 0) {
         return tree_search(r->left, key);
-    /* If the searched key is less than, search right tree instead */
+        /* If the searched key is less than, search right tree instead */
     } else if(strcmp(r->key, key) < 0) {
         return tree_search(r->right, key);
     }
     /* If the keys are equal, return 1 */
     return 1;
-}
-
-tree tree_insert(tree r, char *key) {
-    r = recursive_insert(r, &key);
-    r->colour = BLACK;
-    return r;
 }
 
 tree recursive_insert (tree r, char *key){
@@ -70,16 +64,22 @@ tree recursive_insert (tree r, char *key){
 
     /* If the current top node value is greater than key being inserted, then we insert into the left subtree */
     if(strcmp(r -> key, key) > 0) {
-        r->left = tree_insert(r->left, key);
+        r->left = recursive_insert(r->left, key);
         /* else if the current top node value is less than key being inserted, then we insert into the right subtree */
     } else if(strcmp(r -> key, key) < 0) {
-        r->right = tree_insert(r->right, key);
+        r->right = recursive_insert(r->right, key);
     } else {
         r->frequency++;
     }
 
     r = tree_fix(r);
     /* return modified tree */
+    return r;
+}
+
+tree tree_insert(tree r, char *key) {
+    r = recursive_insert(r, key);
+    r->colour = BLACK;
     return r;
 }
 
@@ -151,13 +151,15 @@ void tree_inorder(tree r, void f(char *s)) {
     if(r == NULL) {
         return;
     }
+    /* call self on left subtree, traversing recursively */
+    tree_inorder(r->left, f);
+
     if (IS_RED(r)) {
         printf("red: ");
     } else {
         printf("black: ");
     }
-    /* call self on left subtree, traversing recursively */
-    tree_inorder(r->left, f);
+    
     /* call print method on current node */
     f(r->key);
     /* call self on right subtree, traversing recursively */
