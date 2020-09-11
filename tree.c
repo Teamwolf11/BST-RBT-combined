@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 #include "tree.h"
 #include "mylib.h"
 
@@ -71,8 +70,10 @@ tree recursive_insert (tree r, char *key){
     } else {
         r->frequency++;
     }
-
+    if(tree_type == RBT){
     r = tree_fix(r);
+    } /* this is for when it is an RBT it will run the fix function */
+    
     /* return modified tree */
     return r;
 }
@@ -264,4 +265,3 @@ void tree_output_dot(tree t, FILE *out) {
     tree_output_dot_aux(t, out);
     fprintf(out, "}\n");
 }
-
