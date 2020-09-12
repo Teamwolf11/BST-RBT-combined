@@ -77,6 +77,7 @@ int main(int argc, char **argv) {
                 /* I put this in brackets as Idk where to put it, due to the search call, marked with a lot of X this has to happen
                  after the new function is called on the tree b*/
                 /*---------------------------------------------------------------------------------------------------------------*/
+                /*---------------------------------------------------------------------------------------------------------------*/
                 for(i=0; i<countList; i++){/*this will go through all the words in the listToCheck*/
 
                     while(whileLoopCounter++ < wordcountDictionary){
@@ -96,6 +97,7 @@ int main(int argc, char **argv) {
                         
                     }/*end while*/
                 }/*end for loop for going through all the words in the listToCheck*/
+                /*---------------------------------------------------------------------------------------------------------------*/
                 /*---------------------------------------------------------------------------------------------------------------*/
                 
                 break;
