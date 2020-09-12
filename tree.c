@@ -71,7 +71,7 @@ tree recursive_insert (tree r, char *key){
         r->frequency++;
     }
     if(tree_type == RBT){
-    r = tree_fix(r);
+        r = tree_fix(r);
     } /* this is for when it is an RBT it will run the fix function */
     
     /* return modified tree */
@@ -156,9 +156,9 @@ void tree_inorder(tree r, void f(char *s)) {
     tree_inorder(r->left, f);
 
     if (IS_RED(r)) {
-        printf("red: ");
+        printf("red:\t");
     } else {
-        printf("black: ");
+        printf("black:\t");
     }
     
     /* call print method on current node */
@@ -173,9 +173,9 @@ void tree_preorder(tree r, void f(char *s)) {
         return;
     }
     if (IS_RED(r)) {
-        printf("red: ");
+        printf("red:\t");
     } else {
-        printf("black: ");
+        printf("black:\t");
     }
     /* call print method on current node */
     f(r->key);
@@ -206,7 +206,33 @@ tree left_rotate(tree r){
 }
 
 int tree_depth(tree r){
+    int leftTree, rightTree = 0;
+    int largest = 0;
     
+    /* if tree is null then return 0 */
+    if(r == NULL) {
+        return 0;
+    }
+
+    if (r->left != NULL) {
+        leftTree++;
+        tree_depth(r->left);
+    }
+
+    if (r->right != NULL) {
+        rightTree++;
+        tree_depth(r->right);
+    }
+
+    /* If the left tree is largest, return it's size
+     * else return right tree's size
+     */
+    if (leftTree > rightTree) {
+        largest = leftTree;
+    } else {
+        largest = rightTree;
+    }
+    return largest;
 }
 
 tree tree_free(tree r) {
