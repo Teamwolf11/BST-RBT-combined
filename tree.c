@@ -9,7 +9,13 @@
 
 static tree_t tree_type;
 
-struct tree_node { /* should live in tree.c */
+/*
+ * tree node
+ * key - value
+ * left - pointer to left child node
+ * right - pointer to right child node
+ */
+struct tree_node { 
     char *key;
     int frequency;
     rbt_colour colour;
@@ -18,7 +24,12 @@ struct tree_node { /* should live in tree.c */
     tree right;
 };
 
-/*returns null node to represent empty new tree*/
+/**
+ * combination tree ADT of either BST or RBT.
+ * tree type based off enumerated type passed through.
+ * returns null node to represent empty new tree.
+ * @param t - the tree.
+ */
 tree tree_new(tree_t t) {
     if (t == BST) {
         tree_type = BST;
@@ -29,6 +40,12 @@ tree tree_new(tree_t t) {
     return NULL;
 }
 
+/**
+ * search for node based on value.
+ * @param r - the tree to start at.
+ * @param key - value we are searching for.
+ * @return 0 if not found, 1 if found.
+ */
 int tree_search(tree r, char *key) {
     if (r == NULL) {
         return 0;
@@ -48,6 +65,12 @@ int tree_search(tree r, char *key) {
     return 1;
 }
 
+/*
+ * insert function.
+ * @param r - tree to insert into.
+ * @param key - value we want to insert.
+ * @return r - the modified tree.
+ */
 tree recursive_insert (tree r, char *key){
     /*If an empty tree, we can allocate memory, copy in the key into the node, and return the result. */
     if(r == NULL) {
@@ -78,6 +101,12 @@ tree recursive_insert (tree r, char *key){
     return r;
 }
 
+/*
+ * insert function continued.
+ * @param r - tree to insert into.
+ * @param key - value we want to insert.
+ * @return r - the modified tree.
+ */
 tree tree_insert(tree r, char *key) {
     r = recursive_insert(r, key);
     r->colour = BLACK;
@@ -147,6 +176,41 @@ tree tree_fix (tree r){
     return r;
 }
 
+/*
+ * rotate function for tree_fix.
+ * @param r - the tree to right rotate.
+ */
+tree right_rotate(tree r){
+    tree temp;
+
+    temp = r;
+    r = r->left;
+    temp->left = r->right;
+    r->right = temp;
+
+    return r;
+}
+
+/*
+ * rotate function for tree_fix.
+ * @param r - the tree to left rotate.
+ */
+tree left_rotate(tree r){
+    tree temp;
+
+    temp = r;
+    r = r->right;
+    temp->right = r->left;
+    r->left = temp;
+
+    return r;
+}
+
+/*
+ * print function for inorder.
+ * @param r - the tree to print.
+ * @param f - print function.
+ */
 void tree_inorder(tree r, void f(char *s)) {
     /* if tree is null then return, stopping */
     if(r == NULL) {
@@ -167,6 +231,11 @@ void tree_inorder(tree r, void f(char *s)) {
     tree_inorder(r->right, f);
 }
 
+/*
+ * print function for preorder.
+ * @param r - the tree to print.
+ * @param f - print function.
+ */
 void tree_preorder(tree r, void f(char *s)) {
     /* if tree is null then return, stopping */
     if(r == NULL) {
@@ -184,33 +253,14 @@ void tree_preorder(tree r, void f(char *s)) {
     tree_preorder(r->right, f);
 }
 
-tree right_rotate(tree r){
-    tree temp;
 
-    temp = r;
-    r = r->left;
-    temp->left = r->right;
-    r->right = temp;
-
-    return r;
-}
-tree left_rotate(tree r){
-    tree temp;
-
-    temp = r;
-    r = r->right;
-    temp->right = r->left;
-    r->left = temp;
-
-    return r;
-}
-
-
+/*
+ * computes the 'maximum' depth of a tree.
+ * the number of nodes along the longest path,
+ * from the root node down to the farthest leaf node.
+ * @param r - the tree.
+ */
 int tree_depth(tree r){
-  
-/* Compute the "maxDepth" of a tree -- the number of   */
-/*    nodes along the longest path from the root node   */
-/*    down to the farthest leaf node. */
 int lDepth = 0;
 int rDepth = 0;
 if (r == NULL)
@@ -230,25 +280,25 @@ else
     }
 }
 
+/*
+ * tree destruction function - frees nodes and nodes key recursively.
+ * @param r - node to free.
+ * @return NULL - a null pointer.
+ */
 tree tree_free(tree r) {
-    /* if tree is null then return, stopping */
+    /* if tree is null then return, stops */
     if(r == NULL) {
         return NULL;
     }
-
     /* free left and right subtrees recursively */
     tree_free(r -> left);
     tree_free(r -> right);
 
-    /* free node and it's key */
+    /* free node and the key */
     free(r -> key);
     free(r);
     return NULL;
 }
-   
-    
-    
-
 
 /**
  * Traverses the tree writing a DOT description about connections, and
