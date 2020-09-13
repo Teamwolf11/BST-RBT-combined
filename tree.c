@@ -205,22 +205,29 @@ tree left_rotate(tree r){
     return r;
 }
 
+
 int tree_depth(tree r){
-    int leftTree, rightTree = 0;
+    int leftTree = 0;
+    int rightTree = 0;
+    int tree_root = 0;
     int largest = 0;
-    
+     
     /* if tree is null then return 0 */
     if(r == NULL) {
         return 0;
     }
-
+    
     if (r->left != NULL) {
         leftTree++;
+        printf("left++\n");
+        printf("%d",leftTree);
         tree_depth(r->left);
     }
-
+    printf("Done with left, now right\n");
     if (r->right != NULL) {
         rightTree++;
+        printf("right++\n");
+        printf("%d",rightTree);
         tree_depth(r->right);
     }
 
