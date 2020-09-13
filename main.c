@@ -10,17 +10,29 @@
 static tree_t type; 
 
 
+/* 
+ * print function to pass to tree_preorder function in tree.c.
+ * @param freq - frequency of key.
+ * @param word - the key/value.
+ */
 static void print_info(int freq, char *word) {
-    /*This is the method to be passsed to teh tree_ppreorder function in tree.c*/
     printf("%-4d %s\n", freq, word);
 }
 
+/*
+ * @param s.
+ */
 void print_key(char *s){
     printf("%5s\n",s);
 }
 
+/* 
+ * tree main function.
+ * @param argc - argument count.
+ * @param argv - argument array.
+ * @return - exit.
+ */
 int main(int argc, char **argv) {
-    
     tree b;
     const char *optstring = "c:df:orh";
     char option;
@@ -38,8 +50,10 @@ int main(int argc, char **argv) {
     int is_f = 0;
     int is_o =0;
     
+    /* default BST. */
     type = BST;
  
+    /**program flags**/
     while ((option = getopt(argc, argv, optstring)) != EOF) {
         switch (option) {
             case 'c':
@@ -49,11 +63,10 @@ int main(int argc, char **argv) {
                 /* printf("10"); */
                 break;
             case 'd':
+                /* print tree depth. */
                 /* the argument after the -b is available
                    in the global variable 'optarg' */
-
-                is_d_called =1;
-                
+                is_d_called = 1;
                 break;
             case 'f':
                 /* do something else */
@@ -67,9 +80,10 @@ int main(int argc, char **argv) {
                 
                 break;
             case 'r':
-                type = RBT;
+                /* tree type becomes RBT. */
+                type = RBT; 
                 break;
-            case 'h':
+            case 'h': /* help message. */
             default:
                 printf("Perform various operations using a binary tree.  By default, words\n");
                 printf("are read from stdin and added to the tree, before being printed out\n");
@@ -106,10 +120,10 @@ int main(int argc, char **argv) {
     if(is_c == 1){
         /*-------------------------------------------------------------------------------------------------------------*/
 
-      
         /* word = ""; */
         /* printf("12\n"); */
        
+        /**checks spelling of words from file using words passed to stdin as the dictionary.**/
         while (getword(word, sizeof word, filename) != EOF) {
             /*this can happen before the insertion
               of dictionary words into tree as it is not affected by order*/
@@ -121,7 +135,7 @@ int main(int argc, char **argv) {
                     /* printf("Found the word: %s\n", word); */
                 }
                 else{
-                    printf("Something went wrong when word was sent to thesearch function in main and it made searchResult a bad value");
+                    printf("Something went wrong when word was sent to the search function in main and it made searchResult a bad value");
                 }
         }/*end while loop for going through all the words in the filetobespellchecked (aka filename)*/
         fclose(filename);
@@ -130,7 +144,7 @@ int main(int argc, char **argv) {
     }/** if the is_c ==1 */
    
 
-    
+    /*if is_d_called and is_c ignored print the tree_depth.*/
     if(is_c == 0 && is_d_called == 1){
         depth = tree_depth(b); 
         printf("print tree depth: %d\n", depth);
