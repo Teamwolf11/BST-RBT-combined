@@ -32,22 +32,22 @@ int main(int argc, char **argv) {
     int countList;
     int whileLoopCounter;
     int searchResult;
-    int boolean;
+    int is_c;
     int depth;
     int is_d_called;
     
     type = BST;
-    boolean =0;/* I change this to true in case c*/
+    is_c =0;/* I change this to true in case c*/
     is_d_called =0;
     
     while ((option = getopt(argc, argv, optstring)) != EOF) {
         switch (option) {
             case 'c':
                 /* do something */
-                boolean=1;            
+                is_c=1;            
                 
                 
-
+                countList =0;
                 word = "";
                 filename =(FILE *) optarg;
                 while (getword(word, sizeof word, filename) != EOF) {
@@ -72,7 +72,7 @@ int main(int argc, char **argv) {
                 /* do something else */
                 break;
             case 'o':
-                if(boolean == 0){/* this if loop is not gonna work*/
+                if(is_c == 0){/* this if loop is not gonna work*/
                     printf("-o works");
                 }
                 break;
@@ -100,54 +100,49 @@ int main(int argc, char **argv) {
     }
     
     if(type == RBT) printf("RBT\n");
-   
+
     b = tree_new(type); /* we have to put this new after switch somehow IDK how
                            (i was thinking just after but we can make this a method)
                            as the -r  might be the last arg given and therefore if we run it
                            early, we won't have the right RBT/BST */
-    for(i=0; i<wordcountDictionary;i++){
-        b=tree_insert(b,dictionary[i]);/*this will insert dictionary words into tree
-                                         but this has to happen before the comparison step*/
-    }
-   
-    if(boolean == 1){
-        
-    /* I put this in brackets as Idk where to put it, due to the search call, marked with a lot of X this has to happen
-       after the new function is called on the tree b*/
-    /*---------------------------------------------------------------------------------------------------------------*/
-    /*---------------------------------------------------------------------------------------------------------------*/
-    for(i=0; i<countList; i++){/*this will go through all the words in the listToCheck*/
-
-        while(whileLoopCounter++ < wordcountDictionary){
-
-            searchResult = tree_search(b, listToCheck[whileLoopCounter]);/*XXXXXXXXXXXXXXXXX*/
-            /*I added the XXX thingy so that I know that b has to be created before this happens*/
-
-
-                        
-            if(searchResult == 0){
-                printf("%s",listToCheck[whileLoopCounter]);
-            }else if(searchResult == 1){
-                printf("Found the word: %s", listToCheck[whileLoopCounter]);
-            }else{
-                printf("Something went wrong when word was sent to the search function in main and it made searchResult a bad value");
-            }
-                        
-        }/*end while*/
-    }/*end for loop for going through all the words in the listToCheck*/
-    /*---------------------------------------------------------------------------------------------------------------*/
-    /*---------------------------------------------------------------------------------------------------------------*/
-    }/** if the boolean ==1 */
-    wordcountDictionary = 0;
-    fileToSpellcheck =(FILE *) optarg;
-    wordOnDictionary ="";
+    
     while (getword(wordOnDictionary, sizeof wordOnDictionary, stdin) != EOF) {
         /*this will get all the words from the dictionary*/
-        dictionary[wordcountDictionary++] = wordOnDictionary;
+        b = tree_insert(b,wordOnDictionary);/*this will insert dictionary words into tree
+                                              but this has to happen before the comparison step*/
     } /* end while */
+     
+    if(is_c == 1){
+
+        /*-------------------------------------------------------------------------------------------------------------*/
+        
+        for(i=0; i<countList; i++){/*this will go through all the words in the listToCheck*/
+
+            while(whileLoopCounter++ < wordcountDictionary){
+
+                searchResult = tree_search(b, listToCheck[whileLoopCounter]);/*XXXXXXXXXXXXXXXXX*/
+                /*I added the XXX thingy so that I know that b has to be created before this happens*/
+
+
+                        
+                if(searchResult == 0){
+                    printf("%s",listToCheck[whileLoopCounter]);
+                }else if(searchResult == 1){
+                    printf("Found the word: %s", listToCheck[whileLoopCounter]);
+                }else{
+                    printf("Something went wrong when word was sent to the
+search function in main and it made searchResult a bad value");
+                }
+                        
+            }/*end while*/
+        }/*end for loop for going through all the words in the listToCheck*/
+        
+        /*------------------------------------------------------------------------------------------------------------*/
+    }/** if the is_c ==1 */
+   
 
     
-    if(boolean == 0 && is_d_called == 1){
+    if(is_c == 0 && is_d_called == 1){
         depth = tree_depth(b); 
         printf("print tree depth: %d",depth);
         exit(EXIT_SUCCESS);
