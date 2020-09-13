@@ -23,7 +23,7 @@ int main(int argc, char **argv) {
     const char *optstring = "c:df:orh";
     char option;
     int i;
-    char *fileToSpellcheck;
+    FILE *fileToSpellcheck;
     char *wordOnDictionary;
     char **dictionary = NULL;
     int wordcountDictionary;
@@ -44,18 +44,12 @@ int main(int argc, char **argv) {
                 boolean=1;            
                 
                 wordcountDictionary = 0;
-                fileToSpellcheck = optarg;
+                fileToSpellcheck =(FILE *) optarg;
                 wordOnDictionary ="";
                 while (getword(wordOnDictionary, sizeof wordOnDictionary, stdin) != EOF) {
                     /*this will get all the words from the dictionary*/
                     dictionary[wordcountDictionary++] = wordOnDictionary;
                 } /* end while */
-
-
-                
-               
-               
-
 
                 word = "";
                 while (getword(word, sizeof word, fileToSpellcheck) != EOF) {
