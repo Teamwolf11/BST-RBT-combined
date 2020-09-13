@@ -5,6 +5,8 @@
 #include "tree.h"
 #include "mylib.h"
 
+#define WORDSIZE 10000
+
 static tree_t type; 
 
 
@@ -22,44 +24,28 @@ int main(int argc, char **argv) {
     tree b;
     const char *optstring = "c:df:orh";
     char option;
-    int i;
+    /* int i; */
     FILE *filename;
-    char *wordOnDictionary;
-    char **dictionary = NULL;
-    int wordcountDictionary;
-    char *word;
-    char **listToCheck= NULL;
-    int countList;
-    int whileLoopCounter;
+    char wordOnDictionary[WORDSIZE];
+    /* int wordcountDictionary; */
+    char word[WORDSIZE];
+    /* char **listToCheck= NULL; */
+    /* int countList; */
     int searchResult;
-    int is_c;
+    int  is_c =0;
     int depth;
-    int is_d_called;
+    int is_d_called =0;
+    int is_f = 0;
+    int is_o =0;
     
     type = BST;
-    is_c =0;/* I change this to true in case c*/
-    is_d_called =0;
-    
+ 
     while ((option = getopt(argc, argv, optstring)) != EOF) {
         switch (option) {
             case 'c':
                 /* do something */
-                is_c=1;            
-                
-                
-                countList =0;
-                word = "";
-                filename =(FILE *) optarg;
-                while (getword(word, sizeof word, filename) != EOF) {
-                    /*this can happen before the insertion
-                      of dictionary words into tree as it is not affected by order*/
+                is_c = 1;            
 
-                    /* This will get all the words for the file we want to spell check*/
-                    listToCheck[countList++] = word;
-                }/* end while*/
-
-                
-                
                 break;
             case 'd':
                 /* the argument after the -b is available
@@ -70,11 +56,14 @@ int main(int argc, char **argv) {
                 break;
             case 'f':
                 /* do something else */
+                is_f = 1;
+
                 break;
             case 'o':
-                if(is_c == 0){/* this if loop is not gonna work*/
+                is_o =1;
+                
                     printf("-o works");
-                }
+                
                 break;
             case 'r':
                 type = RBT;
@@ -106,36 +95,32 @@ int main(int argc, char **argv) {
                            as the -r  might be the last arg given and therefore if we run it
                            early, we won't have the right RBT/BST */
     
-    while (getword(wordOnDictionary, sizeof wordOnDictionary, stdin) != EOF) {
+    while (getword(wordOnDictionary, WORDSIZE, stdin) != EOF) {
         /*this will get all the words from the dictionary*/
         b = tree_insert(b,wordOnDictionary);/*this will insert dictionary words into tree
                                               but this has to happen before the comparison step*/
     } /* end while */
      
     if(is_c == 1){
-
         /*-------------------------------------------------------------------------------------------------------------*/
-        
-        for(i=0; i<countList; i++){/*this will go through all the words in the listToCheck*/
 
-            while(whileLoopCounter++ < wordcountDictionary){
-
-                searchResult = tree_search(b, listToCheck[whileLoopCounter]);/*XXXXXXXXXXXXXXXXX*/
-                /*I added the XXX thingy so that I know that b has to be created before this happens*/
-
-
-                        
+      
+        /* word = ""; */
+        filename =(FILE *) optarg;
+        while (getword(word, sizeof word, filename) != EOF) {
+            /*this can happen before the insertion
+              of dictionary words into tree as it is not affected by order*/
+            searchResult = tree_search(b, word);
+                   
                 if(searchResult == 0){
-                    printf("%s",listToCheck[whileLoopCounter]);
+                    printf("%s",word);
                 }else if(searchResult == 1){
-                    printf("Found the word: %s", listToCheck[whileLoopCounter]);
-                }else{
-                    printf("Something went wrong when word was sent to the
-search function in main and it made searchResult a bad value");
+                    printf("Found the word: %s", word);
                 }
-                        
-            }/*end while*/
-        }/*end for loop for going through all the words in the listToCheck*/
+                /* else{ */
+                /*     printf("Something went wrong when word was sent to thesearch function in main and it made searchResult a bad value"); */
+                /* } */
+        }/*end while loop for going through all the words in the filetobespellchecked (aka filename)*/
         
         /*------------------------------------------------------------------------------------------------------------*/
     }/** if the is_c ==1 */
@@ -144,7 +129,7 @@ search function in main and it made searchResult a bad value");
     
     if(is_c == 0 && is_d_called == 1){
         depth = tree_depth(b); 
-        printf("print tree depth: %d",depth);
+        printf("print tree depth: %d\n", depth);
         exit(EXIT_SUCCESS);
 
     }
