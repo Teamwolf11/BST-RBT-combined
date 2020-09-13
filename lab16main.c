@@ -15,18 +15,17 @@ int main(void) {
     int depth;
     
     tree r = tree_new(RBT);
-    r = tree_insert(r, "h");
-    r = tree_insert(r, "l");
-    r = tree_insert(r, "i");
-    r = tree_insert(r, "f");
-    r = tree_insert(r, "j");
-    r = tree_insert(r, "g");
-    r = tree_insert(r, "k");
-    r = tree_insert(r, "d");
-    r = tree_insert(r, "a");
-    r = tree_insert(r, "e");
-    r = tree_insert(r, "b");
-    r = tree_insert(r, "c");
+    r = tree_insert(r, "Somnambulist");
+    r = tree_insert(r, "Sonorous");
+    r = tree_insert(r, "Serendipity");
+    r = tree_insert(r, "Limerence");
+    r = tree_insert(r, "Bombinate");
+    r = tree_insert(r, "Ethereal");
+    r = tree_insert(r, "Illicit");
+    r = tree_insert(r, "Phosphenes");
+    r = tree_insert(r, "Oblivion");
+    r = tree_insert(r, "Ephemeral");
+
     
     tree_preorder(r, print_key);
     printf("Hello Mike\n");
