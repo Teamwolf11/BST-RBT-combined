@@ -44,8 +44,9 @@ int main(int argc, char **argv) {
         switch (option) {
             case 'c':
                 /* do something */
-                is_c = 1;            
-
+                is_c = 1;
+                filename =fopen(optarg, "r");
+                /* printf("10"); */
                 break;
             case 'd':
                 /* the argument after the -b is available
@@ -86,41 +87,44 @@ int main(int argc, char **argv) {
 
                 exit(EXIT_FAILURE);
         }
+        /* printf("9"); */
     }
     
-    if(type == RBT) printf("RBT\n");
-
+    /* if(type == RBT) printf("RBT\n"); */
+    /* printf("14"); */
     b = tree_new(type); /* we have to put this new after switch somehow IDK how
                            (i was thinking just after but we can make this a method)
                            as the -r  might be the last arg given and therefore if we run it
                            early, we won't have the right RBT/BST */
-    
+    /* printf("15"); */
     while (getword(wordOnDictionary, WORDSIZE, stdin) != EOF) {
         /*this will get all the words from the dictionary*/
         b = tree_insert(b,wordOnDictionary);/*this will insert dictionary words into tree
                                               but this has to happen before the comparison step*/
     } /* end while */
-     
+    /* printf("11"); */
     if(is_c == 1){
         /*-------------------------------------------------------------------------------------------------------------*/
 
       
         /* word = ""; */
-        filename =(FILE *) optarg;
+        /* printf("12\n"); */
+       
         while (getword(word, sizeof word, filename) != EOF) {
             /*this can happen before the insertion
               of dictionary words into tree as it is not affected by order*/
             searchResult = tree_search(b, word);
                    
                 if(searchResult == 0){
-                    printf("%s",word);
+                    printf("%s\n",word);
                 }else if(searchResult == 1){
-                    printf("Found the word: %s", word);
+                    /* printf("Found the word: %s\n", word); */
                 }
-                /* else{ */
-                /*     printf("Something went wrong when word was sent to thesearch function in main and it made searchResult a bad value"); */
-                /* } */
+                else{
+                    printf("Something went wrong when word was sent to thesearch function in main and it made searchResult a bad value");
+                }
         }/*end while loop for going through all the words in the filetobespellchecked (aka filename)*/
+        fclose(filename);
         
         /*------------------------------------------------------------------------------------------------------------*/
     }/** if the is_c ==1 */
