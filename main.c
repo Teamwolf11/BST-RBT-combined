@@ -11,7 +11,7 @@ static void print_info(int freq, char *word) {
     /*This is the method to be passsed to teh tree_ppreorder function in tree.c*/
     printf("%-4d %s\n", freq, word);
 }
-?
+
 void print_key(char *s){
     printf("%5s\n",s);
 }
@@ -32,9 +32,12 @@ int main(int argc, char **argv) {
     int whileLoopCounter;
     int searchResult;
     int boolean;
+    int is_d_called;
+    int depth;
     
     type = BST;
     boolean =0;/* I change this to true in case c*/
+    is_d_called =0;
     
     while ((option = getopt(argc, argv, optstring)) != EOF) {
         switch (option) {
@@ -43,7 +46,7 @@ int main(int argc, char **argv) {
                 boolean=1;            
                 
                 wordcountDictionary = 0;
-                filename =(FILE *) optarg;
+               
                 wordOnDictionary ="";
                 /**check to see if word is in our dictionary**/
                 while (getword(wordOnDictionary, sizeof wordOnDictionary, stdin) != EOF) {
@@ -53,6 +56,7 @@ int main(int argc, char **argv) {
                     
                 } /* end while */
 
+                filename =(FILE *) optarg;
                 word = "";
                 while (getword(word, sizeof word, filename) != EOF) {
                     /*this can happen before the insertion
@@ -67,11 +71,7 @@ int main(int argc, char **argv) {
             case 'd':
                 /* the argument after the -b is available
                    in the global variable 'optarg' */
-                if(boolean == 0){
-                /* tree_depth(b); */
-                printf("Print tree depth");
-                exit(EXIT_SUCCESS);
-                }
+                is_d_called =1;
                 break;
             case 'f':
                 /* do something else */
@@ -106,19 +106,19 @@ int main(int argc, char **argv) {
     }
     
     if(type == RBT) printf("RBT\n");
-    if(boolean == 1){
-        /* I put this in brackets as Idk where to put it, read comments below for more info*/
-        /*---------------------------------------------------------------------------------------------------------------*/
-        b = tree_new(type); /* we have to put this new after switch somehow IDK how
-                               (i was thinking just after but we can make this a method)
-                               as the -r  might be the last arg given and therefore if we run it
-                               early, we won't have the right RBT/BST */
-        for(i=0; i<wordcountDictionary;i++){
-            b=tree_insert(b,dictionary[i]);/*this will insert dictionary words into tree
-                                             but this has to happen before the comparison step*/
-        }
-        /*--------------------------------------------------------------------------------------------------------------*/
+   
+    b = tree_new(type); /* we have to put this new after switch somehow IDK how
+                           (i was thinking just after but we can make this a method)
+                           as the -r  might be the last arg given and therefore if we run it
+                           early, we won't have the right RBT/BST */
+    for(i=0; i<wordcountDictionary;i++){
+        b=tree_insert(b,dictionary[i]);/*this will insert dictionary words into tree
+                                         but this has to happen before the comparison step*/
+    }
+   
 
+    if(boolean == 1){
+       
 
 
     
@@ -148,9 +148,17 @@ int main(int argc, char **argv) {
         /*---------------------------------------------------------------------------------------------------------------*/
         /*---------------------------------------------------------------------------------------------------------------*/
     }/** if the boolean ==1 */
-    tree_preorder(b, print_key);
-    printf("Hello Mike\n");
-    tree_inorder(b, print_key);
+
+    if(boolean == 0 && is_d_called == 1){
+        depth = tree_depth(b);
+        printf("Print tree depth: %d", depth);
+        exit(EXIT_SUCCESS);
+    }
+
+    
+    /* tree_preorder(b, print_key); */
+    /* printf("Hello Mike\n"); */
+    /* tree_inorder(b, print_key); */
 
    
 
