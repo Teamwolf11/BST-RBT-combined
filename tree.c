@@ -205,93 +205,30 @@ tree left_rotate(tree r){
     return r;
 }
 
-/* ===================================== DUGGANS VERSION - KEEP IN CASE ===================================== */
-/* int tree_depth(tree r){ */
-/*     int leftTree = 0; */
-/*     int rightTree = 0; */
-/*     int tree_root = 0; */
-/*     int largest = 0; */
-     
-/*     /\* if tree is null then return 0 *\/ */
-/*     if(r == NULL) { */
-/*         return 0; */
-/*     } */
-    
-/*     if (r->left != NULL) { */
-/*         leftTree++; */
-/*         printf("left++\n"); */
-/*         printf("%d",leftTree); */
-/*         tree_depth(r->left); */
-/*     } */
-/*     printf("Done with left, now right\n"); */
-/*     if (r->right != NULL) { */
-/*         rightTree++; */
-/*         printf("right++\n"); */
-/*         printf("%d",rightTree); */
-/*         tree_depth(r->right); */
-/*     } */
-
-/*     /\* If the left tree is largest, return it's size */
-/*      * else return right tree's size */
-/*      *\/ */
-/*     if (leftTree > rightTree) { */
-/*         largest = leftTree; */
-/*     } else { */
-/*         largest = rightTree; */
-/*     } */
-/*     return largest; */
-/* } */
 
 int tree_depth(tree r){
-    if (r == NULL){
-        return 0;
-    }
-    else if (r->left == NULL && r->right != NULL){
-        /* longest path is from root */
-        return getLongestPathHelper(r->right, 1);
-    }
-    else if (r->left != NULL && r->right == NULL){
-        /* longest path is from root */
-        return getLongestPathHelper(r->left, 1);
-    }
-    else{
-        /* longest path is between deepest node on the left side and deepest node on the right side */
-        return (getLongestPathHelper(r->left, 1) + getLongestPathHelper(r->right, 1));
-    }
-    
-}
-
   
-int getLongestPathHelper(tree r, int level){
-    int left;
-    int right;
-    
-    if (r->left == NULL && r->right == NULL){
-        return level;
-    }
-    else{
-      
-        if (r->left == NULL && r->right != NULL){
-            return getLongestPathHelper(r->right, level + 1);
-        }
-        else if (r->left != NULL && r->right == NULL){
-            return getLongestPathHelper(r->left, level + 1);
-        }
-        else{
-            int left = getLongestPathHelper(r->left, level + 1);
-            int right = getLongestPathHelper(r->right, level + 1);
-            if (right > left) {
-                return right;
-            } else {
-                return left;
-            }
-          
+/* Compute the "maxDepth" of a tree -- the number of   */
+/*    nodes along the longest path from the root node   */
+/*    down to the farthest leaf node. */
+int lDepth = 0;
+int rDepth = 0;
+if (r == NULL)
+    return -1;
+else
+    {
+        /* compute the depth of each subtree */
+        lDepth = tree_depth(r->left);
+        rDepth = tree_depth(r->right);
+  
+        /* use the larger one */
+        if (lDepth > rDepth){
+            return(lDepth+1);
+        }else{
+            return(rDepth+1);
         }
     }
 }
-
-
-
 
 tree tree_free(tree r) {
     /* if tree is null then return, stopping */
@@ -308,6 +245,10 @@ tree tree_free(tree r) {
     free(r);
     return NULL;
 }
+   
+    
+    
+
 
 /**
  * Traverses the tree writing a DOT description about connections, and
