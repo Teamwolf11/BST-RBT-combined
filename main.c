@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <getopt.h>
@@ -32,8 +33,8 @@ int main(int argc, char **argv) {
     int whileLoopCounter;
     int searchResult;
     int boolean;
-    int is_d_called;
     int depth;
+    int is_d_called;
     
     type = BST;
     boolean =0;/* I change this to true in case c*/
@@ -45,19 +46,10 @@ int main(int argc, char **argv) {
                 /* do something */
                 boolean=1;            
                 
-                wordcountDictionary = 0;
-               
-                wordOnDictionary ="";
-                /**check to see if word is in our dictionary**/
-                while (getword(wordOnDictionary, sizeof wordOnDictionary, stdin) != EOF) {
-                    /*this will get all the words from the dictionary*/
-                    dictionary = emalloc(sizeof *dictionary);
-                    dictionary[wordcountDictionary++] = wordOnDictionary;
-                    
-                } /* end while */
+                
 
-                filename =(FILE *) optarg;
                 word = "";
+                filename =(FILE *) optarg;
                 while (getword(word, sizeof word, filename) != EOF) {
                     /*this can happen before the insertion
                       of dictionary words into tree as it is not affected by order*/
@@ -67,18 +59,20 @@ int main(int argc, char **argv) {
                 }/* end while*/
 
                 
+                
                 break;
             case 'd':
                 /* the argument after the -b is available
                    in the global variable 'optarg' */
+
                 is_d_called =1;
+                
                 break;
             case 'f':
                 /* do something else */
-                
                 break;
             case 'o':
-                if(boolean == 0){
+                if(boolean == 0){/* this if loop is not gonna work*/
                     printf("-o works");
                 }
                 break;
@@ -116,46 +110,49 @@ int main(int argc, char **argv) {
                                          but this has to happen before the comparison step*/
     }
    
-
     if(boolean == 1){
-       
+        
+    /* I put this in brackets as Idk where to put it, due to the search call, marked with a lot of X this has to happen
+       after the new function is called on the tree b*/
+    /*---------------------------------------------------------------------------------------------------------------*/
+    /*---------------------------------------------------------------------------------------------------------------*/
+    for(i=0; i<countList; i++){/*this will go through all the words in the listToCheck*/
 
+        while(whileLoopCounter++ < wordcountDictionary){
 
-    
-        /* I put this in brackets as Idk where to put it, due to the search call, marked with a lot of X this has to happen
-           after the new function is called on the tree b*/
-        /*---------------------------------------------------------------------------------------------------------------*/
-        /*---------------------------------------------------------------------------------------------------------------*/
-        for(i=0; i<countList; i++){/*this will go through all the words in the listToCheck*/
-
-            while(whileLoopCounter++ < wordcountDictionary){
-
-                searchResult = tree_search(b, listToCheck[whileLoopCounter]);/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX*/
-                /*I added the XXX thingy so that I know that b has to be created before this happens*/
+            searchResult = tree_search(b, listToCheck[whileLoopCounter]);/*XXXXXXXXXXXXXXXXX*/
+            /*I added the XXX thingy so that I know that b has to be created before this happens*/
 
 
                         
-                if(searchResult == 0){
-                    printf("%s",listToCheck[whileLoopCounter]);
-                }else if(searchResult == 1){
-                    printf("Found the word: %s", listToCheck[whileLoopCounter]);
-                }else{
-                    printf("Something went wrong when word was sent to the search function in main and it made searchResult a bad value");
-                }
+            if(searchResult == 0){
+                printf("%s",listToCheck[whileLoopCounter]);
+            }else if(searchResult == 1){
+                printf("Found the word: %s", listToCheck[whileLoopCounter]);
+            }else{
+                printf("Something went wrong when word was sent to the search function in main and it made searchResult a bad value");
+            }
                         
-            }/*end while*/
-        }/*end for loop for going through all the words in the listToCheck*/
-        /*---------------------------------------------------------------------------------------------------------------*/
-        /*---------------------------------------------------------------------------------------------------------------*/
+        }/*end while*/
+    }/*end for loop for going through all the words in the listToCheck*/
+    /*---------------------------------------------------------------------------------------------------------------*/
+    /*---------------------------------------------------------------------------------------------------------------*/
     }/** if the boolean ==1 */
-
-    if(boolean == 0 && is_d_called == 1){
-        depth = tree_depth(b);
-        printf("Print tree depth: %d", depth);
-        exit(EXIT_SUCCESS);
-    }
+    wordcountDictionary = 0;
+    fileToSpellcheck =(FILE *) optarg;
+    wordOnDictionary ="";
+    while (getword(wordOnDictionary, sizeof wordOnDictionary, stdin) != EOF) {
+        /*this will get all the words from the dictionary*/
+        dictionary[wordcountDictionary++] = wordOnDictionary;
+    } /* end while */
 
     
+    if(boolean == 0 && is_d_called == 1){
+        depth = tree_depth(b); 
+        printf("print tree depth: %d",depth);
+        exit(EXIT_SUCCESS);
+
+    }
     /* tree_preorder(b, print_key); */
     /* printf("Hello Mike\n"); */
     /* tree_inorder(b, print_key); */
