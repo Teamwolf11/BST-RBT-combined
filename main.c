@@ -18,12 +18,14 @@ static void print_info(int freq, char *word) {
     printf("%-4d %s\n", freq, word);
 }
 
-/**
- * @param s.
- **/
-void print_key(char *s){
-    printf("%5s\n",s);
-}
+
+/* /\** */
+/*  * @param s. */
+/*  **\/ */
+/* void print_key(char *s){ */
+/*     printf("%5s\n",s); */
+/* } */
+
 
 /**
  * tree main function.
@@ -42,7 +44,6 @@ int main(int argc, char **argv) {
     char word[WORDSIZE];
     /* char **listToCheck= NULL; */
     /* int countList; */
-    int searchResult;
     int  is_c =0;
     int depth;
     int is_d_called =0;
@@ -77,7 +78,7 @@ int main(int argc, char **argv) {
                 break;
             case 'o':
                 is_o =1;
-                    printf("-o works");                
+                printf("-o works");                
                 break;
             case 'r':
                 /* tree type becomes RBT. */
@@ -104,57 +105,61 @@ int main(int argc, char **argv) {
     }
     
     /* if(type == RBT) printf("RBT\n"); */
-
     b = tree_new(type); 
-    fillTime = (end - start) / (double)CLOCKS_PER_SEC;
-    
+
+    /*-------------------------------------------------------------------------------------------------------------*/   
+    /*this will get all the words from the dictionary*/
     while (getword(wordOnDictionary, WORDSIZE, stdin) != EOF) {
-        /*this will get all the words from the dictionary*/
-        b = tree_insert(b,wordOnDictionary);/*this will insert dictionary words into tree
-                                              but this has to happen before the comparison step*/
+        /*this will insert dictionary words into tree but this has to happen before the comparison step*/
+        b = tree_insert(b,wordOnDictionary);
     } /* end while */
+    /*-------------------------------------------------------------------------------------------------------------*/   
 
-
-    if(is_c == 1){
-        /*-------------------------------------------------------------------------------------------------------------*/       
+    
+    /*-------------------------------------------------------------------------------------------------------------*/   
+    if(is_c == 1){    
         /**checks spelling of words from file using words passed to stdin as the dictionary.**/
         start = clock();
         while (getword(word, sizeof word, filename) != EOF) {
             /*this can happen before the insertion
               of dictionary words into tree as it is not affected by order*/
-            //searchResult = tree_search(b, word);
                    
-                if(tree_search(b, word) == 0){
-                    unknownWord++;
-                    printf("%s\n",word);
-                }else if(searchResult == 1){
-                    /* printf("Found the word: %s\n", word); */
-                }
-                else{
-                    printf("Something went wrong when word was sent to the search function in main and it made searchResult a bad value");
-                }
+            if(tree_search(b, word) == 0){
+                unknownWord++;
+                printf("%s\n",word);
+            }else if(tree_search(b, word) == 1){
+                /* printf("Found the word: %s\n", word); */
+            }
+            else{
+                printf("Something went wrong when word was sent to the search function in main and it made searchResult a bad value");
+            }
         }/*end while loop for going through all the words in the filetobespellchecked (aka filename)*/
+
+        end = clock();
+        fillTime = (end - start) / (double)CLOCKS_PER_SEC;
         
         /**print timing information**/
         fprintf(stderr, "Fill time     : %.6f\nSearch Time   : %.6f\n", fillTime,
-            (clock() - start) / (double)CLOCKS_PER_SEC);
+                (clock() - start) / (double)CLOCKS_PER_SEC);
         fprintf(stderr, "Unknown Words = %d\n", unknownWord);
         
-        end = clock();
+
 
         fclose(filename);
         
-        /*------------------------------------------------------------------------------------------------------------*/
     }/** if the is_c ==1 */
+    /*-------------------------------------------------------------------------------------------------------------*/   
    
-
+    /*-------------------------------------------------------------------------------------------------------------*/   
     /*if is_d_called and is_c ignored print the tree_depth.*/
     if(is_c == 0 && is_d_called == 1){
         depth = tree_depth(b); 
         printf("print tree depth: %d\n", depth);
         exit(EXIT_SUCCESS);
-
     }
+    /*-------------------------------------------------------------------------------------------------------------*/
+    /* tree_preorder(b, print_info); */
+    
     /* tree_preorder(b, print_key); */
     /* printf("DIVIDE\n"); */
     /* tree_inorder(b, print_key); */
