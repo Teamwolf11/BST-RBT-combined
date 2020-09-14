@@ -225,11 +225,11 @@ void tree_inorder(tree r, void f(char *s)) {
     /* call self on left subtree, traversing recursively */
     tree_inorder(r->left, f);
 
-    if (IS_RED(r)) {
-        printf("red:\t");
-    } else {
-        printf("black:\t");
-    }
+    /* if (IS_RED(r)) { */
+    /*     printf("red:\t"); */
+    /* } else { */
+    /*     printf("black:\t"); */
+    /* } */
     
     /* call print method on current node */
     f(r->key);
@@ -247,11 +247,11 @@ void tree_preorder(tree r, void f(int freq, char *s)) {
     if(r == NULL) {
         return;
     }
-    if (IS_RED(r)) {
-        printf("red:\t");
-    } else {
-        printf("black:\t");
-    }
+    /* if (IS_RED(r)) { */
+    /*     printf("red:\t"); */
+    /* } else { */
+    /*     printf("black:\t"); */
+    /* } */
     /* call print method on current node */
     f(r->frequency,r->key);
     /* call self on left and right, traversing subtree recursively */
