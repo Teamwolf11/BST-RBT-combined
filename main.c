@@ -50,9 +50,8 @@ int main(int argc, char **argv) {
     int is_o =0;
     clock_t start, end;
     int unknownWord = 0;
-    double fill = 0;
+    double fillTime = 0;
 
-    
     /* default BST. */
     type = BST;
  
@@ -78,9 +77,7 @@ int main(int argc, char **argv) {
                 break;
             case 'o':
                 is_o =1;
-                
-                    printf("-o works");
-                
+                    printf("-o works");                
                 break;
             case 'r':
                 /* tree type becomes RBT. */
@@ -109,12 +106,14 @@ int main(int argc, char **argv) {
     /* if(type == RBT) printf("RBT\n"); */
 
     b = tree_new(type); 
+    fillTime = (end - start) / (double)CLOCKS_PER_SEC;
     
     while (getword(wordOnDictionary, WORDSIZE, stdin) != EOF) {
         /*this will get all the words from the dictionary*/
         b = tree_insert(b,wordOnDictionary);/*this will insert dictionary words into tree
                                               but this has to happen before the comparison step*/
     } /* end while */
+
 
     if(is_c == 1){
         /*-------------------------------------------------------------------------------------------------------------*/       
@@ -137,10 +136,12 @@ int main(int argc, char **argv) {
         }/*end while loop for going through all the words in the filetobespellchecked (aka filename)*/
         
         /**print timing information**/
-        fprintf(stderr, "Fill time     : %.6f\nSearch Time   : %.6f\n", fill,
+        fprintf(stderr, "Fill time     : %.6f\nSearch Time   : %.6f\n", fillTime,
             (clock() - start) / (double)CLOCKS_PER_SEC);
         fprintf(stderr, "Unknown Words = %d\n", unknownWord);
         
+        end = clock();
+
         fclose(filename);
         
         /*------------------------------------------------------------------------------------------------------------*/
@@ -157,6 +158,9 @@ int main(int argc, char **argv) {
     /* tree_preorder(b, print_key); */
     /* printf("DIVIDE\n"); */
     /* tree_inorder(b, print_key); */
-   
+
+    /* Memory deallocation */
+    tree_free(b);
+    
     return EXIT_SUCCESS;
 }
