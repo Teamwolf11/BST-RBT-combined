@@ -112,7 +112,13 @@ tree tree_insert(tree r, char *key) {
     r->colour = BLACK;
     return r;
 }
-
+/**
+ * The fix method looks downwards through the nodes to see
+   if any children/grandchildren pairs are both red.
+ * If this happens then rotations and re-colourings must occur.
+ * @param r - tree to use/fix.
+ * @return r - the modified tree.
+ **/
 tree tree_fix (tree r){
     if(IS_RED(r->left)){ /* If left child of root (A) is red */
     
