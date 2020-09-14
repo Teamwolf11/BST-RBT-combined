@@ -1,14 +1,13 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <getopt.h>
 #include "tree.h"
 #include "mylib.h"
+#include <time.h>
 
 #define WORDSIZE 10000
 
 static tree_t type; 
-
 
 /**
  * print function to pass to tree_preorder function in tree.c.
@@ -49,6 +48,10 @@ int main(int argc, char **argv) {
     int is_d_called =0;
     int is_f = 0;
     int is_o =0;
+    clock_t start, end;
+    int unknownWord = 0;
+    double fill = 0;
+
     
     /* default BST. */
     type = BST;
@@ -101,35 +104,29 @@ int main(int argc, char **argv) {
 
                 exit(EXIT_FAILURE);
         }
-        /* printf("9"); */
     }
     
     /* if(type == RBT) printf("RBT\n"); */
-    /* printf("14"); */
-    b = tree_new(type); /* we have to put this new after switch somehow IDK how
-                           (i was thinking just after but we can make this a method)
-                           as the -r  might be the last arg given and therefore if we run it
-                           early, we won't have the right RBT/BST */
-    /* printf("15"); */
+
+    b = tree_new(type); 
+    
     while (getword(wordOnDictionary, WORDSIZE, stdin) != EOF) {
         /*this will get all the words from the dictionary*/
         b = tree_insert(b,wordOnDictionary);/*this will insert dictionary words into tree
                                               but this has to happen before the comparison step*/
     } /* end while */
-    /* printf("11"); */
-    if(is_c == 1){
-        /*-------------------------------------------------------------------------------------------------------------*/
 
-        /* word = ""; */
-        /* printf("12\n"); */
-       
+    if(is_c == 1){
+        /*-------------------------------------------------------------------------------------------------------------*/       
         /**checks spelling of words from file using words passed to stdin as the dictionary.**/
+        start = clock();
         while (getword(word, sizeof word, filename) != EOF) {
             /*this can happen before the insertion
               of dictionary words into tree as it is not affected by order*/
-            searchResult = tree_search(b, word);
+            //searchResult = tree_search(b, word);
                    
-                if(searchResult == 0){
+                if(tree_search(b, word) == 0){
+                    unknownWord++;
                     printf("%s\n",word);
                 }else if(searchResult == 1){
                     /* printf("Found the word: %s\n", word); */
@@ -138,6 +135,12 @@ int main(int argc, char **argv) {
                     printf("Something went wrong when word was sent to the search function in main and it made searchResult a bad value");
                 }
         }/*end while loop for going through all the words in the filetobespellchecked (aka filename)*/
+        
+        /**print timing information**/
+        fprintf(stderr, "Fill time     : %.6f\nSearch Time   : %.6f\n", fill,
+            (clock() - start) / (double)CLOCKS_PER_SEC);
+        fprintf(stderr, "Unknown Words = %d\n", unknownWord);
+        
         fclose(filename);
         
         /*------------------------------------------------------------------------------------------------------------*/
@@ -152,11 +155,8 @@ int main(int argc, char **argv) {
 
     }
     /* tree_preorder(b, print_key); */
-    /* printf("Hello Mike\n"); */
+    /* printf("DIVIDE\n"); */
     /* tree_inorder(b, print_key); */
-
    
-
-    /* printf("%d\n",rbt_search(b,"abc")); */
     return EXIT_SUCCESS;
 }
