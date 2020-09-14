@@ -10,28 +10,28 @@
 static tree_t type; 
 
 
-/* 
+/**
  * print function to pass to tree_preorder function in tree.c.
  * @param freq - frequency of key.
  * @param word - the key/value.
- */
+ **/
 static void print_info(int freq, char *word) {
     printf("%-4d %s\n", freq, word);
 }
 
-/*
+/**
  * @param s.
- */
+ **/
 void print_key(char *s){
     printf("%5s\n",s);
 }
 
-/* 
+/**
  * tree main function.
  * @param argc - argument count.
  * @param argv - argument array.
  * @return - exit.
- */
+ **/
 int main(int argc, char **argv) {
     tree b;
     const char *optstring = "c:df:orh";
