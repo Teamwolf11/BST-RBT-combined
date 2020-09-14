@@ -39,7 +39,7 @@ int main(int argc, char **argv) {
     int is_f = 0;
     int is_o = 0;
     /**print timing variables**/
-    clock_t start, end;
+    clock_t fillStart, fillEnd, searchStart, searchEnd;
     int unknownWord = 0;
     double fillTime = 0;
     double searchTime = 0;
@@ -94,25 +94,26 @@ int main(int argc, char **argv) {
     b = tree_new(type); 
 
     /*all the words from the dictionary.*/
-    start = clock();
+    fillStart = clock();
     while (getword(wordOnDictionary, WORDSIZE, stdin) != EOF) {
         /*insert dictionary words into tree*/
         b = tree_insert(b,wordOnDictionary);
     } /* end while */
-    end = clock();
-    fillTime = (end - start) / (double)CLOCKS_PER_SEC;
+    fillEnd = clock();
+    fillTime = (fillEnd - fillStart) / (double)CLOCKS_PER_SEC;
 
     /**checks spelling of words from filename using words passed to stdin as the dictionary.**/
     if(is_c == 1){    
-        start = clock();
+        searchStart = clock();
         while (getword(word, sizeof word, filename) != EOF) {                   
             if(tree_search(b, word) == 0){
                 unknownWord++;
                 printf("%s\n",word);
             }
+            searchEnd = clock();  
         }/*end while*/
-        searchTime = (clock() - start) / (double)CLOCKS_PER_SEC;
-        end = clock();
+        searchTime = (searchEnd - searchStart) / (double)CLOCKS_PER_SEC;
+        
         
         /**print timing information**/
         fprintf(stderr, "Fill time     : %.6f\nSearch Time   : %.6f\n", fillTime, searchTime);
@@ -141,7 +142,7 @@ int main(int argc, char **argv) {
     }
 
     if(is_c == 0 && is_d == 00 && is_f == 0 && is_o ==0){
-    tree_preorder(b, print_info);
+        tree_preorder(b, print_info);
     }
 
     /* Memory deallocation */
