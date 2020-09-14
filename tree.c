@@ -236,7 +236,7 @@ void tree_inorder(tree r, void f(char *s)) {
  * @param r - the tree to print.
  * @param f - print function.
  **/
-void tree_preorder(tree r, void f(char *s)) {
+void tree_preorder(tree r, void f(int freq, char *s)) {
     /* if tree is null then return, stopping */
     if(r == NULL) {
         return;
@@ -247,7 +247,7 @@ void tree_preorder(tree r, void f(char *s)) {
         printf("black:\t");
     }
     /* call print method on current node */
-    f(r->key);
+    f(r->frequency,r->key);
     /* call self on left and right, traversing subtree recursively */
     tree_preorder(r->left, f);
     tree_preorder(r->right, f);
@@ -261,23 +261,23 @@ void tree_preorder(tree r, void f(char *s)) {
  * @param r - the tree.
  **/
 int tree_depth(tree r){
-int lDepth = 0;
-int rDepth = 0;
-if (r == NULL)
-    return -1;
-else
-    {
-        /* compute the depth of each subtree */
-        lDepth = tree_depth(r->left);
-        rDepth = tree_depth(r->right);
+    int lDepth = 0;
+    int rDepth = 0;
+    if (r == NULL)
+        return -1;
+    else
+        {
+            /* compute the depth of each subtree */
+            lDepth = tree_depth(r->left);
+            rDepth = tree_depth(r->right);
   
-        /* use the larger one */
-        if (lDepth > rDepth){
-            return(lDepth+1);
-        }else{
-            return(rDepth+1);
+            /* use the larger one */
+            if (lDepth > rDepth){
+                return(lDepth+1);
+            }else{
+                return(rDepth+1);
+            }
         }
-    }
 }
 
 /**
