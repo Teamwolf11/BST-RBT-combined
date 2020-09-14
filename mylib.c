@@ -4,9 +4,12 @@
 #include <assert.h>
 #include <ctype.h>
 
-
+/**
+ * Memory allocation function.
+ * @param s - takes the size given to allocate.
+ * @return result - returns memory allocated.
+ **/
 void *emalloc(size_t s) {
-    /* implementation of emalloc goes here */
     void* result =malloc(s);
     if(result==NULL){
         fprintf(stderr, "memory allocation failed.\n");
@@ -15,8 +18,13 @@ void *emalloc(size_t s) {
     return result;
 }
 
+/**
+ * Memory reallocation function.
+ * @param myArray - takes the array we want to reallocate memory to.
+ * @param s - takes the size given to allocate.
+ * @return result - returns memory allocated.
+ **/
 void *erealloc(void *myArray, size_t s) {
-    /* implementation of erealloc goes here */
     void* changedArray = realloc(myArray, s);
     if (NULL == changedArray) {
         fprintf(stderr, "memory reallocation failed.\n");
@@ -24,6 +32,14 @@ void *erealloc(void *myArray, size_t s) {
     }
     return changedArray;
 }
+
+/**
+ * Function to get words from file. 
+ * @param s - word to be read in.
+ * @param limit - max size of word.
+ * @param stream - where the word  will come from.
+ * @return int - based off whether reached end of file or not.
+ **/
 int getword(char *s, int limit, FILE *stream) {
     int c;
     char *w = s;
