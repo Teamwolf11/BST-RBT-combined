@@ -9,12 +9,12 @@
 
 static tree_t tree_type;
 
-/*
+/**
  * tree node
  * key - value
  * left - pointer to left child node
  * right - pointer to right child node
- */
+ **/
 struct tree_node { 
     char *key;
     int frequency;
@@ -29,7 +29,7 @@ struct tree_node {
  * tree type based off enumerated type passed through.
  * returns null node to represent empty new tree.
  * @param t - the tree.
- */
+ **/
 tree tree_new(tree_t t) {
     if (t == BST) {
         tree_type = BST;
@@ -45,7 +45,7 @@ tree tree_new(tree_t t) {
  * @param r - the tree to start at.
  * @param key - value we are searching for.
  * @return 0 if not found, 1 if found.
- */
+ **/
 int tree_search(tree r, char *key) {
     if (r == NULL) {
         return 0;
@@ -65,12 +65,12 @@ int tree_search(tree r, char *key) {
     return 1;
 }
 
-/*
+/**
  * insert function.
  * @param r - tree to insert into.
  * @param key - value we want to insert.
  * @return r - the modified tree.
- */
+ **/
 tree recursive_insert (tree r, char *key){
     /*If an empty tree, we can allocate memory, copy in the key into the node, and return the result. */
     if(r == NULL) {
@@ -101,12 +101,12 @@ tree recursive_insert (tree r, char *key){
     return r;
 }
 
-/*
+/**
  * insert function continued.
  * @param r - tree to insert into.
  * @param key - value we want to insert.
  * @return r - the modified tree.
- */
+ **/
 tree tree_insert(tree r, char *key) {
     r = recursive_insert(r, key);
     r->colour = BLACK;
@@ -176,10 +176,10 @@ tree tree_fix (tree r){
     return r;
 }
 
-/*
+/**
  * rotate function for tree_fix.
  * @param r - the tree to right rotate.
- */
+ **/
 tree right_rotate(tree r){
     tree temp;
 
@@ -191,10 +191,10 @@ tree right_rotate(tree r){
     return r;
 }
 
-/*
+/**
  * rotate function for tree_fix.
  * @param r - the tree to left rotate.
- */
+ **/
 tree left_rotate(tree r){
     tree temp;
 
@@ -206,11 +206,11 @@ tree left_rotate(tree r){
     return r;
 }
 
-/*
+/**
  * print function for inorder.
  * @param r - the tree to print.
  * @param f - print function.
- */
+ **/
 void tree_inorder(tree r, void f(char *s)) {
     /* if tree is null then return, stopping */
     if(r == NULL) {
@@ -231,11 +231,11 @@ void tree_inorder(tree r, void f(char *s)) {
     tree_inorder(r->right, f);
 }
 
-/*
+/**
  * print function for preorder.
  * @param r - the tree to print.
  * @param f - print function.
- */
+ **/
 void tree_preorder(tree r, void f(char *s)) {
     /* if tree is null then return, stopping */
     if(r == NULL) {
@@ -254,12 +254,12 @@ void tree_preorder(tree r, void f(char *s)) {
 }
 
 
-/*
+/**
  * computes the 'maximum' depth of a tree.
  * the number of nodes along the longest path,
  * from the root node down to the farthest leaf node.
  * @param r - the tree.
- */
+ **/
 int tree_depth(tree r){
 int lDepth = 0;
 int rDepth = 0;
@@ -280,11 +280,11 @@ else
     }
 }
 
-/*
+/**
  * tree destruction function - frees nodes and nodes key recursively.
  * @param r - node to free.
  * @return NULL - a null pointer.
- */
+ **/
 tree tree_free(tree r) {
     /* if tree is null then return, stops */
     if(r == NULL) {
