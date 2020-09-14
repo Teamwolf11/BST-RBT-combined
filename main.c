@@ -37,13 +37,12 @@ int main(int argc, char **argv) {
     tree b;
     const char *optstring = "c:df:orh";
     char option;
-    /* int i; */
+  
     FILE *filename;
     char wordOnDictionary[WORDSIZE];
-    /* int wordcountDictionary; */
+
     char word[WORDSIZE];
-    /* char **listToCheck= NULL; */
-    /* int countList; */
+   
     int  is_c =0;
     int depth;
     int is_d_called =0;
@@ -52,6 +51,7 @@ int main(int argc, char **argv) {
     clock_t start, end;
     int unknownWord = 0;
     double fillTime = 0;
+    double searchTime = 0;
     FILE *dotFile;
     FILE *customDotFile;
     
@@ -80,7 +80,7 @@ int main(int argc, char **argv) {
                 break;
             case 'o':
                 is_o =1;
-                printf("-o works\n");                
+                /* printf("-o works\n");  */               
                 break;
             case 'r':
                 /* tree type becomes RBT. */
@@ -154,7 +154,11 @@ int main(int argc, char **argv) {
         exit(EXIT_SUCCESS);
     }
   
-    if(is_o == 1 && is_c == 0){
+    if(is_f == 1 && is_o == 1 && is_c == 0){
+        /* printf("creating new custom file xD"); */
+        tree_output_dot(b, customDotFile);
+        fclose(customDotFile);
+    }else if(is_o == 1 && is_c == 0){
         dotFile = fopen("tree-view.dot", "w");
         printf("Creating dot file 'tree-view.dot'\n");
         tree_output_dot(b,dotFile); 
@@ -162,10 +166,7 @@ int main(int argc, char **argv) {
        
     }
 
-    if(is_f == 1 && is_o == 1 && is_c == 0){
-        printf("creating new custom file xD");
-        
-    }
+    
   
     /* tree_preorder(b, print_info );*/
     
