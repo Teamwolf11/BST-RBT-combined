@@ -1,3 +1,4 @@
+
 #ifndef TREE_H_
 #define TREE_H_
 
@@ -14,8 +15,7 @@ extern int  tree_search(tree r, char *key);
 extern tree tree_insert(tree r, char *key);
 extern tree recursive_insert(tree r, char *key);
 
-extern void tree_inorder(tree r, void f(char *key));
-extern void tree_preorder(tree r, void f(char *key));
+extern void tree_preorder(tree r, void f(int i, char *key));
 extern tree tree_free(tree r);
 
 extern tree right_rotate(tree r);
