@@ -18,15 +18,6 @@ static void print_info(int freq, char *word) {
     printf("%-4d %s\n", freq, word);
 }
 
-
-/* /\** */
-/*  * @param s. */
-/*  **\/ */
-/* void print_key(char *s){ */
-/*     printf("%5s\n",s); */
-/* } */
-
-
 /**
  * tree main function.
  * @param argc - argument count.
@@ -37,13 +28,9 @@ int main(int argc, char **argv) {
     tree b;
     const char *optstring = "c:df:orh";
     char option;
-    /* int i; */
     FILE *filename;
     char wordOnDictionary[WORDSIZE];
-    /* int wordcountDictionary; */
     char word[WORDSIZE];
-    /* char **listToCheck= NULL; */
-    /* int countList; */
     int  is_c =0;
     int depth;
     int is_d_called =0;
@@ -109,13 +96,15 @@ int main(int argc, char **argv) {
 
     /*-------------------------------------------------------------------------------------------------------------*/   
     /*this will get all the words from the dictionary*/
+    start = clock();
     while (getword(wordOnDictionary, WORDSIZE, stdin) != EOF) {
         /*this will insert dictionary words into tree but this has to happen before the comparison step*/
         b = tree_insert(b,wordOnDictionary);
     } /* end while */
+    end = clock();
+    fillTime = (end - start) / (double)CLOCKS_PER_SEC;
     /*-------------------------------------------------------------------------------------------------------------*/   
 
-    
     /*-------------------------------------------------------------------------------------------------------------*/   
     if(is_c == 1){    
         /**checks spelling of words from file using words passed to stdin as the dictionary.**/
@@ -135,15 +124,10 @@ int main(int argc, char **argv) {
             }
         }/*end while loop for going through all the words in the filetobespellchecked (aka filename)*/
 
-        end = clock();
-        fillTime = (end - start) / (double)CLOCKS_PER_SEC;
-        
         /**print timing information**/
-        fprintf(stderr, "Fill time     : %.6f\nSearch Time   : %.6f\n", fillTime,
+        fprintf(stderr, "Fill time     : %.6f\n Search Time   : %.6f\n", fillTime,
                 (clock() - start) / (double)CLOCKS_PER_SEC);
         fprintf(stderr, "Unknown Words = %d\n", unknownWord);
-        
-
 
         fclose(filename);
         
