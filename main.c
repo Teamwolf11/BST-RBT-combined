@@ -119,8 +119,8 @@ int main(int argc, char **argv) {
         fprintf(stderr, "Unknown Words = %d\n", unknownWord);
 
         fclose(filename);
-    }
         
+    }
 
     /*if is_d, is_c ignored print the tree_depth.*/
     if(is_c == 0 && is_d == 1){
@@ -140,7 +140,9 @@ int main(int argc, char **argv) {
         fclose(dotFile);
     }
 
-    /* tree_preorder(b, print_info);*/
+    if(is_c == 0 && is_d == 00 && is_f == 0 && is_o ==0){
+    tree_preorder(b, print_info);
+    }
 
     /* Memory deallocation */
     tree_free(b);
