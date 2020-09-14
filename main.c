@@ -73,17 +73,23 @@ int main(int argc, char **argv) {
                 break;
             case 'h': /* help message. */
             default:
-                printf("Perform various operations using a binary tree.  By default, words\n");
-                printf("are read from stdin and added to the tree, before being printed out\n");
+                printf("Perform various operations using a binary tree.\n");
+                printf("By default, words are read from stdin and\n");
+                printf("added to the tree, before being printed out\n");
                 printf("alongside their frequencies to stdout.\n");
                 printf("\n");
-                printf("-c FILENAME  Check spelling of words in FILENAME using words\n");
-                printf("             read from stdin as the dictionary.  Print timing\n");
-                printf("             info & unknown words to stderr (ignore -d & -o)\n");
+                printf("-c FILENAME  Check spelling of words in FILENAME\n");
+                printf("             using words read from stdin as\n");
+                printf("             the dictionary. Print timing info\n");
+                printf("             & unknown words to stderr\n");
+                printf("             (ignore -d & -o)");
                 printf("-d           Only print the tree depth (ignore -o)\n");
-                printf("-f FILENAME  Write DOT output to FILENAME (if -o given)\n");
-                printf("-o           Output the tree in DOT form to file 'tree-view.dot'\n");
-                printf("-r           Make the tree an RBT (the default is a BST)\n");
+                printf("-f FILENAME  Write DOT output to FILENAME\n");
+                printf("             (if -o given)");
+                printf("-o           Output the tree in DOT form to file\n");
+                printf("             'tree-view.dot'");
+                printf("-r           Make the tree an RBT\n");
+                printf("             (changing from default is a BST)");
                 printf("\n");
                 printf("-h           Print this message\n\n");
 
@@ -102,7 +108,7 @@ int main(int argc, char **argv) {
     fillEnd = clock();
     fillTime = (fillEnd - fillStart) / (double)CLOCKS_PER_SEC;
 
-    /**checks spelling of words from filename using words passed to stdin as the dictionary.**/
+    /**spell check words from filename.**/
     if(is_c == 1){    
         searchStart = clock();
         while (getword(word, sizeof word, filename) != EOF) {                   
@@ -115,8 +121,9 @@ int main(int argc, char **argv) {
         searchTime = (searchEnd - searchStart) / (double)CLOCKS_PER_SEC;
         
         
-        /**print timing information**/
-        fprintf(stderr, "Fill time     : %.6f\nSearch Time   : %.6f\n", fillTime, searchTime);
+        /**print timing information.**/
+        fprintf(stderr, "Fill time     : %.6f\nSearch Time   : %.6f\n"
+        , fillTime, searchTime);
         fprintf(stderr, "Unknown Words = %d\n", unknownWord);
 
         fclose(filename);
