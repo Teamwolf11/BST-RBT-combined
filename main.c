@@ -111,13 +111,15 @@ int main(int argc, char **argv) {
 
     /*-------------------------------------------------------------------------------------------------------------*/   
     /*this will get all the words from the dictionary*/
+    start = clock();
     while (getword(wordOnDictionary, WORDSIZE, stdin) != EOF) {
         /*this will insert dictionary words into tree but this has to happen before the comparison step*/
         b = tree_insert(b,wordOnDictionary);
     } /* end while */
+    end = clock();
+    fillTime = (end - start) / (double)CLOCKS_PER_SEC;
     /*-------------------------------------------------------------------------------------------------------------*/   
 
-    
     /*-------------------------------------------------------------------------------------------------------------*/   
     if(is_c == 1){    
         /**checks spelling of words from file using words passed to stdin as the dictionary.**/
@@ -129,28 +131,19 @@ int main(int argc, char **argv) {
             if(tree_search(b, word) == 0){
                 unknownWord++;
                 printf("%s\n",word);
-            }else if(tree_search(b, word) == 1){
-                /* printf("Found the word: %s\n", word); */
-            }
-            else{
-                printf("Something went wrong when word was sent to the search function in main and it made searchResult a bad value");
             }
         }/*end while loop for going through all the words in the filetobespellchecked (aka filename)*/
-
+        searchTime = (clock() - start) / (double)CLOCKS_PER_SEC;
         end = clock();
-        fillTime = (end - start) / (double)CLOCKS_PER_SEC;
         
         /**print timing information**/
-        fprintf(stderr, "Fill time     : %.6f\nSearch Time   : %.6f\n", fillTime,
-                (clock() - start) / (double)CLOCKS_PER_SEC);
+        fprintf(stderr, "Fill time     : %.6f\nSearch Time   : %.6f\n", fillTime, searchTime);
         fprintf(stderr, "Unknown Words = %d\n", unknownWord);
-        
-
 
         fclose(filename);
         
     }/** if the is_c ==1 */
-    /*-------------------------------------------------------------------------------------------------------------*/   
+    /*-------------------------------------------------------------------------------------------------------------*/ 
     
     
      
