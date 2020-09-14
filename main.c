@@ -116,8 +116,8 @@ int main(int argc, char **argv) {
                 unknownWord++;
                 printf("%s\n",word);
             }
-            searchEnd = clock();  
         }/*end while*/
+        searchEnd = clock();
         searchTime = (searchEnd - searchStart) / (double)CLOCKS_PER_SEC;
         
         
