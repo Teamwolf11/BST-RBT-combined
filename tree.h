@@ -23,4 +23,6 @@ extern tree left_rotate(tree r);
 extern tree tree_fix (tree r);
 extern int tree_depth(tree r);
 
+extern void tree_output_dot(tree t, FILE *out);
+
 #endif
