@@ -119,6 +119,7 @@ int main(int argc, char **argv) {
         fprintf(stderr, "Unknown Words = %d\n", unknownWord);
 
         fclose(filename);
+    }
         
 
     /*if is_d, is_c ignored print the tree_depth.*/
