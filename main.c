@@ -18,15 +18,6 @@ static void print_info(int freq, char *word) {
     printf("%-4d %s\n", freq, word);
 }
 
-
-/* /\** */
-/*  * @param s. */
-/*  **\/ */
-/* void print_key(char *s){ */
-/*     printf("%5s\n",s); */
-/* } */
-
-
 /**
  * tree main function.
  * @param argc - argument count.
@@ -36,24 +27,22 @@ static void print_info(int freq, char *word) {
 int main(int argc, char **argv) {
     tree b;
     const char *optstring = "c:df:orh";
-    char option;
-  
+    char option; 
     FILE *filename;
+    FILE *dotFile;
+    FILE *customDotFile;
     char wordOnDictionary[WORDSIZE];
-
     char word[WORDSIZE];
-   
-    int  is_c =0;
     int depth;
-    int is_d_called =0;
+    int is_c = 0;
+    int is_d = 0;
     int is_f = 0;
-    int is_o =0;
+    int is_o = 0;
+    /**print timing variables**/
     clock_t start, end;
     int unknownWord = 0;
     double fillTime = 0;
     double searchTime = 0;
-    FILE *dotFile;
-    FILE *customDotFile;
     
     /* default BST. */
     type = BST;
@@ -62,25 +51,21 @@ int main(int argc, char **argv) {
     while ((option = getopt(argc, argv, optstring)) != EOF) {
         switch (option) {
             case 'c':
-                /* do something */
                 is_c = 1;
                 filename =fopen(optarg, "r");
-                /* printf("10"); */
                 break;
             case 'd':
                 /* print tree depth. */
                 /* the argument after the -b is available
                    in the global variable 'optarg' */
-                is_d_called = 1;
+                is_d = 1;
                 break;
             case 'f':
-                /* do something else */
                 is_f = 1;
                 customDotFile = fopen(optarg, "w");                                      
                 break;
             case 'o':
                 is_o =1;
-                /* printf("-o works\n");  */               
                 break;
             case 'r':
                 /* tree type becomes RBT. */
@@ -106,33 +91,26 @@ int main(int argc, char **argv) {
         }
     }
     
-    /* if(type == RBT) printf("RBT\n"); */
     b = tree_new(type); 
 
-    /*-------------------------------------------------------------------------------------------------------------*/   
-    /*this will get all the words from the dictionary*/
+    /*all the words from the dictionary.*/
     start = clock();
     while (getword(wordOnDictionary, WORDSIZE, stdin) != EOF) {
-        /*this will insert dictionary words into tree but this has to happen before the comparison step*/
+        /*insert dictionary words into tree*/
         b = tree_insert(b,wordOnDictionary);
     } /* end while */
     end = clock();
     fillTime = (end - start) / (double)CLOCKS_PER_SEC;
-    /*-------------------------------------------------------------------------------------------------------------*/   
 
-    /*-------------------------------------------------------------------------------------------------------------*/   
+    /**checks spelling of words from filename using words passed to stdin as the dictionary.**/
     if(is_c == 1){    
-        /**checks spelling of words from file using words passed to stdin as the dictionary.**/
         start = clock();
-        while (getword(word, sizeof word, filename) != EOF) {
-            /*this can happen before the insertion
-              of dictionary words into tree as it is not affected by order*/
-                   
+        while (getword(word, sizeof word, filename) != EOF) {                   
             if(tree_search(b, word) == 0){
                 unknownWord++;
                 printf("%s\n",word);
             }
-        }/*end while loop for going through all the words in the filetobespellchecked (aka filename)*/
+        }/*end while*/
         searchTime = (clock() - start) / (double)CLOCKS_PER_SEC;
         end = clock();
         
@@ -142,20 +120,16 @@ int main(int argc, char **argv) {
 
         fclose(filename);
         
-    }/** if the is_c ==1 */
-    /*-------------------------------------------------------------------------------------------------------------*/ 
-    
-    
-     
-    /*if is_d_called and is_c ignored print the tree_depth.*/
-    if(is_c == 0 && is_d_called == 1){
+
+    /*if is_d, is_c ignored print the tree_depth.*/
+    if(is_c == 0 && is_d == 1){
         depth = tree_depth(b); 
         printf("print tree depth: %d\n", depth);
         exit(EXIT_SUCCESS);
     }
   
+    /*if is_f and i_o, is_c is ignored.*/
     if(is_f == 1 && is_o == 1 && is_c == 0){
-        /* printf("creating new custom file xD"); */
         tree_output_dot(b, customDotFile);
         fclose(customDotFile);
     }else if(is_o == 1 && is_c == 0){
@@ -163,16 +137,9 @@ int main(int argc, char **argv) {
         printf("Creating dot file 'tree-view.dot'\n");
         tree_output_dot(b,dotFile); 
         fclose(dotFile);
-       
     }
 
-    
-  
-    /* tree_preorder(b, print_info );*/
-    
-    /* tree_preorder(b, print_key); */
-    /* printf("DIVIDE\n"); */
-    /* tree_inorder(b, print_key); */
+    /* tree_preorder(b, print_info);*/
 
     /* Memory deallocation */
     tree_free(b);
