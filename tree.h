@@ -1,4 +1,3 @@
-
 #ifndef TREE_H_
 #define TREE_H_
 
@@ -25,4 +24,4 @@ extern int tree_depth(tree r);
 
 extern void tree_output_dot(tree t, FILE *out);
 
-#endif
+#endif 
