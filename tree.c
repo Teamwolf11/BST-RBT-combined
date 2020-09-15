@@ -55,7 +55,7 @@ int tree_search(tree r, char *key) {
     /* If the searched key is greater, search left tree instead.*/
     if (strcmp(r->key, key) > 0) {
         return tree_search(r->left, key);
-    /* If the searched key is less than, search right tree instead.*/
+        /* If the searched key is less than, search right tree instead.*/
     } else if(strcmp(r->key, key) < 0) {
         return tree_search(r->right, key);
     }
@@ -85,7 +85,7 @@ tree recursive_insert (tree r, char *key){
     /*if current top node is greater than key, then insert into left subtree.*/
     if(strcmp(r -> key, key) > 0) {
         r->left = recursive_insert(r->left, key);
-    /*if the current top node is less than key, then insert into right subtree */
+        /*if current top node less than key,  insert into right subtree */
     } else if(strcmp(r -> key, key) < 0) {
         r->right = recursive_insert(r->right, key);
     } else {
@@ -114,7 +114,7 @@ tree tree_insert(tree r, char *key) {
 }
 /**
  * The fix method looks downwards through the nodes to see.
-   if any children/grandchildren pairs are both red.
+ if any children/grandchildren pairs are both red.
  * If this happens then rotations and re-colourings must occur.
  * @param r - tree to use/fix.
  * @return r - the modified tree.
