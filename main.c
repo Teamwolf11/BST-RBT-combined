@@ -19,7 +19,8 @@ static void print_info(int freq, char *word) {
 }
 
 /**
- * tree main function.
+ * Main function for tree.c.
+ * Takes each use case, and acts upon them accordingly.
  * @param argc - argument count.
  * @param argv - argument array.
  * @return - exit.
@@ -123,7 +124,7 @@ int main(int argc, char **argv) {
         
         /**print timing information.**/
         fprintf(stderr, "Fill time     : %.6f\nSearch Time   : %.6f\n"
-        , fillTime, searchTime);
+                , fillTime, searchTime);
         fprintf(stderr, "Unknown Words = %d\n", unknownWord);
 
         fclose(filename);
