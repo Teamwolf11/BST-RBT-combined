@@ -1,6 +1,9 @@
 # BST-RBT-combined
 
-This is our COSC242 assignment for university of Otago
+This is a University group project, where we coded Binary Search Trees and Red-black Trees.
+
+
+This is executed from the commandline, with command line arguments.
 
 mylib.c - this will have emalloc and erealloc functions
 
@@ -12,4 +15,3 @@ tree.h - header for tree.c
 
 tree.c - code for BST and RBT
 
-any other files are expendable and are more for when we were figuring out what and how we were going to code it.
